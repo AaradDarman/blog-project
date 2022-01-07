@@ -17,6 +17,7 @@ import DashboardLayout from "../components/layouts/DashboardLayout";
 import Dashboard from "../components/Dashboard";
 import CreatePost from "../components/Dashboard/CreatePost";
 import Posts from "../components/Dashboard/Posts";
+import PostContext from "../context/PostContext";
 
 const Blog = () => {
   const { user } = useSelector((state) => state);
@@ -89,7 +90,14 @@ const Blog = () => {
             }
           >
             <Route index element={<Dashboard />} />
-            <Route path="create-post" element={<CreatePost />} />
+            <Route
+              path="create-post"
+              element={
+                <PostContext>
+                  <CreatePost />
+                </PostContext>
+              }
+            />
             <Route path="posts" element={<Posts />} />
           </Route>
         </Routes>
