@@ -18,6 +18,7 @@ import Dashboard from "../components/Dashboard";
 import CreatePost from "../components/Dashboard/CreatePost";
 import Posts from "../components/Dashboard/Posts";
 import PostContext from "../context/PostContext";
+import Post from "../components/Post";
 
 const Blog = () => {
   const { user } = useSelector((state) => state);
@@ -78,6 +79,7 @@ const Blog = () => {
                 !_.isEmpty(user) ? <Logout /> : <Navigate to="/" replace />
               }
             />
+            <Route path="/p/:id" element={<Post />} />
           </Route>
           <Route
             path="/dashboard"
