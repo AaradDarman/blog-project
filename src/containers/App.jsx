@@ -19,6 +19,7 @@ const App = () => {
   return (
     <ThemeProvider theme={themeMode}>
       <BrowserRouter>
+        <ToastContainer theme="dark" />
         <GlobalStyles />
         <Blog />
       </BrowserRouter>
