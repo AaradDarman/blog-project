@@ -6,7 +6,7 @@ import ReactInputVerificationCode from "react-input-verification-code";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { useAuth } from "../context/user-context";
+import { useAuth } from "../context/auth-context";
 import CountDownTimer from "./CountDownTimer";
 import StyledDialog from "./shared/StyledDialog";
 
