@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useCreatePost } from "../../context/post-context";
 
 const Wraper = styled.div`
   background-color: ${({ theme }) => theme.primary};
@@ -43,6 +44,13 @@ const Wraper = styled.div`
 `;
 
 const BannerInput = () => {
+  const { bannerImage, setBannerImage } = useCreatePost();
+
+  const handleImageUpload = (event) => {
+    if (event.target.files[0]) {
+      setBannerImage(event.target.files[0]);
+    }
+  };
 
   return (
     <Wraper className="rtl">
@@ -50,7 +58,15 @@ const BannerInput = () => {
       <form enctype="multipart/form-data">
         <div className="banner-upload-wraper">
           <label for="post-banner" className="banner-upload-label">
-            "Drop the file or click to upload"
+            {bannerImage ? (
+              <img
+                src={URL.createObjectURL(bannerImage)}
+                alt="banner"
+                className="banner-preview"
+              />
+            ) : (
+              "Drop the file or click to upload"
+            )}
           </label>
         </div>
         <input
@@ -61,6 +77,7 @@ const BannerInput = () => {
           aria-describedby="postBanner"
           accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"
           className="banner-upload-input"
+          onChange={handleImageUpload}
         />
       </form>
     </Wraper>
