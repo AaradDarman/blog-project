@@ -28,6 +28,14 @@ const resendCode = (userId) => {
   return http.post(`${config.localapi}/resend-code`, JSON.stringify(userId)); 
 };
 
+const getPosts = () => {
+  return http.get(`${config.localapi}/posts`);
+};
+
+const getPost = (id) => {
+  return http.get(`${config.localapi}/post/${id}`);
+};
+
 export default {
   signup,
   login,
@@ -35,4 +43,6 @@ export default {
   changePassword,
   forgetPassword,
   resendCode,
+  getPosts,
+  getPost,
 };
