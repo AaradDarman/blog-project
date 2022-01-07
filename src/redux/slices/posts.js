@@ -53,3 +53,17 @@ export const getPosts = () => async (dispatch) => {
     });
   }
 };
+
+export const getPostsByAuthor = (authorId) => async (dispatch) => {
+  try {
+    const { status, data } = await api.getPostsByAuthor(authorId);
+    if (status === 200) {
+      dispatch(setPosts(data.posts));
+    }
+  } catch (e) {
+    toast.error(e?.response?.data?.message, {
+      position: "bottom-center",
+      closeOnClick: true,
+    });
+  }
+};
