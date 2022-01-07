@@ -13,6 +13,10 @@ import Logout from "../components/Logout";
 import { setHeader } from "../adapters/xhr";
 import { decodeToken } from "../utils/token-helper";
 import { setUser, logout } from "../redux/slices/user";
+import DashboardLayout from "../components/layouts/DashboardLayout";
+import Dashboard from "../components/Dashboard";
+import CreatePost from "../components/Dashboard/CreatePost";
+import Posts from "../components/Dashboard/Posts";
 
 const Blog = () => {
   const { user } = useSelector((state) => state);
@@ -73,6 +77,20 @@ const Blog = () => {
                 !_.isEmpty(user) ? <Logout /> : <Navigate to="/" replace />
               }
             />
+          </Route>
+          <Route
+            path="/dashboard"
+            element={
+              _.isEmpty(user) || !user.isAdmin ? (
+                <Navigate to="/" replace />
+              ) : (
+                <DashboardLayout />
+              )
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="create-post" element={<CreatePost />} />
+            <Route path="posts" element={<Posts />} />
           </Route>
         </Routes>
       )}
