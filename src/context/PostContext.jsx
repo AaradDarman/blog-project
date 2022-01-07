@@ -13,15 +13,21 @@ const PostContext = ({ children }) => {
   const dispatch = useDispatch();
 
   const handleCreatePost = () => {
-    dispatch(
-      createNewPost({
-        post: {
-          title: postTitle,
-          bannerImage: `/images/${bannerImage.name}`,
-          content,
-        },
+    let formData = new FormData();
+    let contentImagesFiles = contentImages.map((c) => c.file);
+    for (let i = 0; i < contentImagesFiles.length; i++) {
+      formData.append(contentImagesFiles[i].name, contentImagesFiles[i]);
+    }
+    formData.append("post-banner", bannerImage);
+    formData.append(
+      "post",
+      JSON.stringify({
+        title: postTitle,
+        subtitle: postSubtitle,
+        content,
       })
     );
+    dispatch(createNewPost(formData));
   };
 
   return (
