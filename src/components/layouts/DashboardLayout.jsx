@@ -1,11 +1,13 @@
-import React from "react";
+import React,{useEffect} from "react";
 
 import styled from "styled-components";
 import { Link, useLocation, Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import Icon from "../shared/Icon";
+import { clearPost } from "../../redux/slices/post";
 
 const Wrper = styled.div`
-  /* background-color: ${({ theme }) => theme.secondary}; */
   .header {
     display: flex;
     width: 200px;
@@ -105,10 +107,30 @@ const Wrper = styled.div`
     font-size: 0;
     color: transparent;
   }
+  @media (max-width: 500px) {
+    .navigation {
+      width: 56px;
+    }
+    .navigation:hover {
+      width: 200px;
+    }
+    .main-section {
+      margin-right: 56px;
+    }
+    .header {
+      padding-right: 0.3rem;
+    }
+  }
 `;
 
 const DashboardLayout = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearPost());
+  }, []);
+  
   return (
     <Wrper className="dashboard-layout rtl">
       <nav className="navigation p-0">
@@ -130,7 +152,9 @@ const DashboardLayout = () => {
               <Icon
                 className="icon"
                 icon={`${
-                  location.pathname === "/dashboard" ? "home-fill" : "home"
+                  location.pathname === "/dashboard"
+                    ? "profile-filled"
+                    : "profile"
                 }`}
                 size={24}
               />
@@ -139,7 +163,8 @@ const DashboardLayout = () => {
           </li>
           <li
             className={`menu-item ${
-              location.pathname.includes("/dashboard/create-post")
+              location.pathname.includes("/dashboard/create-post") ||
+              location.pathname.includes("/dashboard/edit-post")
                 ? "active"
                 : ""
             }`}
@@ -148,9 +173,10 @@ const DashboardLayout = () => {
               <Icon
                 className="icon"
                 icon={`${
-                  location.pathname.includes("/dashboard/create-post")
-                    ? "group-fill"
-                    : "group"
+                  location.pathname.includes("/dashboard/create-post") ||
+                  location.pathname.includes("/dashboard/edit-post")
+                    ? "create-post-filled"
+                    : "create-post"
                 }`}
                 size={24}
               />
@@ -167,8 +193,8 @@ const DashboardLayout = () => {
                 className="icon"
                 icon={`${
                   location.pathname === "/dashboard/posts"
-                    ? "bill-fill"
-                    : "bill"
+                    ? "posts-filled"
+                    : "posts"
                 }`}
                 size={24}
               />
