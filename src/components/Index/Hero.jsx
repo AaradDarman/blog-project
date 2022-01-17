@@ -1,10 +1,12 @@
 import React from "react";
+
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import styled from "styled-components";
 import { rgba } from "polished";
 import { useSelector } from "react-redux";
+
 import CarouselItem from "./CarouselItem";
 
 const Wraper = styled.div`
@@ -86,7 +88,7 @@ const Hero = () => {
   const { posts } = useSelector((state) => state);
   return (
     <Wraper className="home-carousel">
-      {posts.length && (
+      {posts?.entity?.length && (
         <OwlCarousel
           className="owl-theme"
           loop
@@ -118,7 +120,7 @@ const Hero = () => {
             },
           }}
         >
-          {posts?.map((post) => (
+          {posts?.entity?.map((post) => (
             <CarouselItem post={post} key={post?._id} />
           ))}
         </OwlCarousel>
