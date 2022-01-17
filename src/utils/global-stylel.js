@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components";
-import { darken, lighten } from "polished";
+import { darken, lighten, rgba } from "polished";
 export const GlobalStyles = createGlobalStyle`
 body {
     background: ${({ theme }) => theme.text};
@@ -67,6 +67,10 @@ body {
     border: 1px solid ${({ theme }) => theme.secondary};
     border-radius: 2px;
   }
+  .bp3-input:disabled {
+    background-color:inherit;
+    cursor: default;
+  }
   .bp3-input:focus {
     box-shadow: 0 0 0 1px ${({ theme }) => theme.accent},
       0 0 0 3px rgb(120 94 36 / 30%), inset 0 1px 1px rgb(120 94 36 / 20%);
@@ -74,6 +78,15 @@ body {
   .bp3-input::placeholder {
     color: #5c7080;
     font-size: 0.8rem;
+  }
+  .bp3-input-action {
+    height: 100%;
+    direction: ltr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.3rem;
+    font-size: 1rem;
   }
   .bp3-form-group label.bp3-label {
     margin-bottom: 10px;
@@ -136,4 +149,48 @@ body {
   .m-btn-cancel:hover {
     background-color: transparent;
   }
+  .danger {
+    box-shadow: 0 0 0 0 rgb(219 55 55 / 0%), 0 0 0 0 rgb(219 55 55 / 0%),
+      inset 0 0 0 1px #db3737, inset 0 0 0 1px rgb(16 22 26 / 15%),
+      inset 0 1px 1px rgb(16 22 26 / 20%);
+  }
+  .success {
+    box-shadow: 0 0 0 1px #0f9960, 0 0 0 3px rgb(15 153 96 / 30%),
+      inset 0 1px 1px rgb(16 22 26 / 20%);
+  }.bp3-popover2 .bp3-popover2-content{
+    background:${({ theme }) => theme.primary};
+    color:${({ theme }) => theme.text};
+    margin-top: 2rem;
+  }
+  .actions-menu-popover{
+    background:${({ theme }) => theme.primary};
+    border:1px solid ${({ theme }) => theme.secondary};
+    color:${({ theme }) => theme.text};
+  }
+  .actions-menu-popover .bp3-popover2-content{
+      margin-top: 0;
+    }
+  .bp3-popover2 {
+    box-shadow: none;
+  }
+  .bp3-overlay-backdrop.bp3-popover2-backdrop {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  .loading-spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(41,49,51,0.5);
+    z-index: 999;
+  }
+  .loading-spinner-modal{
+    position: absolute;
+    width: 100%;
+  }
+
   `;
