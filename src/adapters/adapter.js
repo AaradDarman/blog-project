@@ -2,46 +2,46 @@ import http from "./xhr";
 import config from "./xhr/config.json";
 
 const signup = (user) => {
-  return http.post(`${config.localapi}/signup`, JSON.stringify(user));
+  return http.post(`${config.api}/signup`, JSON.stringify(user));
 };
 
 const login = (user) => {
-  return http.post(`${config.localapi}/login`, JSON.stringify(user));
+  return http.post(`${config.api}/login`, JSON.stringify(user));
 };
 
 const verify = (verificationCode) => {
   return http.post(
-    `${config.localapi}/verifiy-account`,
+    `${config.api}/verifiy-account`,
     JSON.stringify(verificationCode)
   );
 };
 
 const changePassword = (data) => {
-  return http.post(`${config.localapi}/changepassword`, JSON.stringify(data));
+  return http.post(`${config.api}/changepassword`, JSON.stringify(data));
 };
 
 const forgetPassword = (data) => {
-  return http.post(`${config.localapi}/forgetpassword`, JSON.stringify(data));
+  return http.post(`${config.api}/forgetpassword`, JSON.stringify(data));
 };
 
 const resendCode = (userId) => {
-  return http.post(`${config.localapi}/resend-code`, JSON.stringify(userId));
+  return http.post(`${config.api}/resend-code`, JSON.stringify(userId));
 };
 
 const changeProfileImage = (data) => {
-  return http.post(`${config.localapi}/change-profile-image`, data);
+  return http.post(`${config.api}/change-profile-image`, data);
 };
 
 const getPosts = () => {
-  return http.get(`${config.localapi}/posts`);
+  return http.get(`${config.api}/posts`);
 };
 
 const getPost = (id) => {
-  return http.get(`${config.localapi}/post/${id}`);
+  return http.get(`${config.api}/post/${id}`);
 };
 
 const getCategories = () => {
-  return http.get(`${config.localapi}/posts/categories`);
+  return http.get(`${config.api}/posts/categories`);
 };
 
 export default {
