@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import api from "../../adapters/admin-adapter";
 
 // Slice
 const slice = createSlice({
@@ -10,11 +11,14 @@ const slice = createSlice({
     resetUser: (state, action) => {
       return {};
     },
+    changeProfile: (state, action) => {
+      state.profileImage = action.payload;
+    },
   },
 });
 export default slice.reducer;
 // Actions
-const { setUserAction, resetUser } = slice.actions;
+const { setUserAction, resetUser, changeProfile } = slice.actions;
 
 /**
  * @param {Object} user - user object
@@ -32,9 +36,33 @@ export const setUser = (user) => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-  console.log("logout");
   try {
     dispatch(resetUser());
+  } catch (e) {
+    toast.error(e?.response?.data?.message, {
+      position: "bottom-center",
+      closeOnClick: true,
+    });
+  }
+};
+
+export const getAuthorInfo = () => async (dispatch) => {
+  try {
+    const { status, data } = await api.getAuthorInfo();
+    if (status === 200) {
+      dispatch(setUserAction(data.user));
+    }
+  } catch (e) {
+    toast.error(e?.response?.data?.message, {
+      position: "bottom-center",
+      closeOnClick: true,
+    });
+  }
+};
+
+export const changeProfileImage = (profileImage) => async (dispatch) => {
+  try {
+    dispatch(changeProfile(profileImage));
   } catch (e) {
     toast.error(e?.response?.data?.message, {
       position: "bottom-center",
