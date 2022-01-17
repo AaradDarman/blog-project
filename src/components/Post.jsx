@@ -1,13 +1,19 @@
 import React, { useEffect } from "react";
+
 import styled from "styled-components";
+import { darken, lighten } from "polished";
+import { useParams, Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   createMarkup,
   convertContentToHTML,
 } from "../utils/post-content-helper";
-import { lighten } from "polished";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { convetStringToUrlFormat } from "../utils/string-helper";
 import { getPost, clearPost } from "../redux/slices/post";
+import Icon from "./shared/Icon";
+import LoadingSpinner from "./shared/LoadingSpinner";
+import { fromNow } from "../utils/date-helper";
 
 const Wraper = styled.article`
   display: flex;
@@ -53,6 +59,7 @@ const Wraper = styled.article`
   .post-subtitle {
     z-index: 1;
     font-size: 1rem;
+    color: rgb(232, 230, 227);
   }
   .post-content {
     position: relative;
@@ -76,6 +83,43 @@ const Wraper = styled.article`
     font-family: inherit !important;
     line-height: 1.5;
   }
+  .meta-data {
+    display: flex;
+    color: rgb(232, 230, 227);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+  .post-categories {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .post-category {
+    color: ${({ theme }) => theme.text};
+    text-decoration: none;
+    margin: 0 2px;
+    transition: all 0.3s ease;
+  }
+  .post-category:not(:last-child):after {
+    content: "،";
+  }
+  .post-category:hover {
+    color: ${({ theme }) => darken(0.06, theme.accent)};
+  }
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  .post-tag {
+    color: ${({ theme }) => theme.button};
+    margin-left: 5px;
+    text-decoration: none;
+  }
+  .post-tag::before {
+    content: "#";
+  }
 `;
 
 const Post = () => {
@@ -85,7 +129,6 @@ const Post = () => {
   useEffect(() => {
     window.scrollTo({
       top: 0,
-      // behavior: "smooth",
     });
     if (id !== post?.entity?._id) {
       dispatch(clearPost());
@@ -95,16 +138,56 @@ const Post = () => {
 
   return (
     <Wraper className="post rtl" bannerSrc={post?.entity?.bannerImage}>
+      <LoadingSpinner show={post?.status === "loading"} />
       <div className="post-banner">
         <h1 className="post-title">{post?.entity?.title}</h1>
-        <h3 className="post-subtitle">{post?.entity?.subtitle}</h3>
+        <h3 className="post-subtitle mb-3">{post?.entity?.subtitle}</h3>
+        <div className="meta-data">
+          <div className="d-flex align-items-center">
+            <Icon className="icon mr-1" icon="profile" size={15} />
+            <span className="author mr-3">
+              {post?.entity?.author?.fullName}
+            </span>
+          </div>
+          <div className="d-flex align-items-center">
+            <Icon className="icon mr-1" icon="calendar" size={15} />
+            <span className="create-date mr-3">{fromNow(post?.entity?.createAt)}</span>
+          </div>
+          <div className="d-flex align-items-center">
+            <Icon className="icon mr-1" icon="view" size={15} />
+          </div>
+          <span className="views-count">{post?.entity?.viewCount}</span>
+        </div>
       </div>
-      <div
-        className="post-content w-75"
-        dangerouslySetInnerHTML={createMarkup(
-          convertContentToHTML(post?.entity?.content)
+      <div className="post-content w-75">
+        <div
+          dangerouslySetInnerHTML={createMarkup(
+            convertContentToHTML(post?.entity?.content)
+          )}
+        ></div>
+        <div className="post-categories">
+          <Icon className="icon mr-1" icon="folder" size={15} />
+          {post?.entity?.categories?.map((c, index) => (
+            <Link
+              to={`/c/${convetStringToUrlFormat(c)}`}
+              className="post-category"
+              key={index}
+            >
+              {c}
+            </Link>
+          ))}
+        </div>
+        {post?.entity?.tags?.length > 0 && (
+          <div className="post-tags">
+            <span>برچسب ها: </span>
+            {post?.entity?.tags?.map((t, index) => (
+              <Link to={`/t/${t}`} className="post-tag" key={index}>
+                {t}
+              </Link>
+            ))}
+          </div>
         )}
-      ></div>
+      </div>
     </Wraper>
   );
 };
