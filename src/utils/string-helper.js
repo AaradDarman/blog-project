@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export const shorten = (text, maxLength) => {
   var ret = text;
   if (ret.length > maxLength) {
@@ -5,7 +7,6 @@ export const shorten = (text, maxLength) => {
   }
   return ret;
 };
-
 
 export const toEnglishDigits = (str) => {
   // convert persian digits [۰۱۲۳۴۵۶۷۸۹]
@@ -20,4 +21,12 @@ export const toEnglishDigits = (str) => {
     return t.charCodeAt(0) - e;
   });
   return str;
+};
+
+export const convetStringToUrlFormat = (str) => {
+  return _.kebabCase(str);
+};
+
+export const convetUrlToStringFormat = (str) => {
+  return str.replace(/-/g, " ");
 };
