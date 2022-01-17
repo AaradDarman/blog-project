@@ -62,7 +62,7 @@ const ProfilePopover = ({ className }) => {
           <li>
             {!user?.isAdmin ? (
               <Link to="/account">
-                <Icon className="mr-2" icon="user" size={20} />
+                <Icon className="mr-2" icon="profile" size={20} />
                 پروفایل
               </Link>
             ) : (
@@ -107,7 +107,7 @@ const ProfilePopover = ({ className }) => {
           onMouseEnter={() => isMd && setIsOpen(true)}
           onClick={() => setIsOpen(true)}
         >
-          <Icon icon="user" size={20} />
+          <Icon icon="profile" size={20} />
         </button>
       </Popover2>
     </Wraper>

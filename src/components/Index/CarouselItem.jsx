@@ -1,4 +1,5 @@
 import React from "react";
+
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -9,9 +10,17 @@ const Wraper = styled.div`
   height: 100vh;
   @media (max-width: 768px) {
     max-height: 500px;
+    .carousel-caption h2 {
+      width: 100%;
+      text-align: center;
+    }
   }
   & a:hover {
     color: inherit;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
   }
   .carousel-caption {
     display: flex;
@@ -20,10 +29,18 @@ const Wraper = styled.div`
     position: absolute;
     text-align: right;
     width: 80%;
-    margin-bottom: 30px;
-    right: 15%;
-    left: auto;
+    left: 10%;
+    right: auto;
+    bottom: 30%;
     direction: rtl;
+  }
+  .bg-overlay {
+    position: absolute;
+    inset: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: ${({ theme }) => theme.primary};
+    opacity: 0.6;
   }
   @media (min-width: 993px) {
     .carousel-caption {
@@ -31,28 +48,21 @@ const Wraper = styled.div`
     }
   }
   .carousel-caption h2 {
-    background-color: ${({ theme }) => theme.accent};
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 6% 100%);
-    padding: 8px 8px 8px 30px;
+    color: rgb(232, 230, 227);
+    text-shadow: rgb(0 0 0) 2px 2px 3px;
+    padding: 8px 15px;
     margin: 0;
     font-size: 1.3rem;
   }
   .carousel-caption div:first-of-type {
+    color: ${({ theme }) => theme.text};
     display: flex;
-    background-color: #020101;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 6% 100%);
     padding: 8px 8px 8px 30px;
     margin: 1rem 0;
     font-size: 1rem;
   }
   .carousel-caption div:last-child {
     display: inline-block;
-    color: #020101;
-    background-image: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0) 0%,
-      #ffffff 50%
-    );
     padding: 8px 8px 8px 30px;
     font-size: 1rem;
   }
@@ -82,6 +92,7 @@ const Wraper = styled.div`
 const CarouselItem = ({ post }) => {
   return (
     <Wraper className="m-carousel-item" bannerSrc={post?.bannerImage}>
+      <div className="bg-overlay"></div>
       <div className="carousel-caption">
         <h2>
           <Link to={`/p/${post?._id}`}>{post?.title}</Link>

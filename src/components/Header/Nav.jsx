@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { darken } from "polished";
 
+import { convetStringToUrlFormat } from "../../utils/string-helper";
+
 const Wraper = styled.nav`
   transition: all 200ms ease-in-out;
   line-height: 2;
@@ -38,22 +40,28 @@ const Nav = ({ float, className }) => {
     <Wraper className={`${className} navigation-menu`} float={float}>
       <ul>
         <li>
-          <Link to="#">اخبار و مقالات</Link>
+          <Link to={`/c/${convetStringToUrlFormat("اخبار و مقالات")}`}>
+            اخبار و مقالات
+          </Link>
         </li>
         <li>
-          <Link to="#">علمی</Link>
+          <Link to={`/c/${convetStringToUrlFormat("علمی")}`}>علمی</Link>
         </li>
         <li>
-          <Link to="#">فیلم و سریال</Link>
+          <Link to={`/c/${convetStringToUrlFormat("فیلم و سریال")}`}>
+            فیلم و سریال
+          </Link>
         </li>
         <li>
-          <Link to="#">بررسی بازی ها</Link>
+          <Link to={`/c/${convetStringToUrlFormat("بررسی بازی ها")}`}>
+            بررسی بازی ها
+          </Link>
         </li>
         <li>
-          <Link to="#">فناوری</Link>
+          <Link to={`/c/${convetStringToUrlFormat("فناوری")}`}>فناوری</Link>
         </li>
         <li>
-          <Link to="#">سلامت</Link>
+          <Link to={`/c/${convetStringToUrlFormat("سلامت")}`}>سلامت</Link>
         </li>
       </ul>
     </Wraper>

@@ -6,7 +6,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 
-import Icon from "../Shared/Icon";
+import Icon from "../shared/Icon";
 import { useAuth } from "../../context/auth-context";
 import GenderPicker from "./GenderPicker";
 import BirthdayPicker from "./BirthdayPicker";

@@ -17,7 +17,6 @@ const Wraper = styled.form`
   overflow-x: hidden;
   h5.title {
     font-size: 1.2rem;
-    font-family: "Vazir-Bold";
     text-align: center;
     color: ${({ theme }) => theme.text};
     margin-bottom: 1rem;
