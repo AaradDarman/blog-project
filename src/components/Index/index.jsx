@@ -7,6 +7,7 @@ import { lighten } from "polished";
 import Post from "./Post";
 import { getPosts } from "../../redux/slices/posts";
 import Hero from "./Hero";
+import LoadingSpinner from "../shared/LoadingSpinner";
 
 const Wraper = styled.div`
   .posts {
@@ -26,12 +27,13 @@ const Index = () => {
 
   return (
     <Wraper className="row flex-column w-100 m-0 justify-content-center align-items-center">
+      <LoadingSpinner show={posts?.status === "loading"} />
       <div className="col-12 p-0">
         <Hero />
       </div>
       <div className="posts col-12 col-sm-10 py-2 px-0 px-sm-5">
         <div className="row m-0 justify-content-center justify-content-sm-start">
-          {posts?.map((post) => (
+          {posts?.entity?.map((post) => (
             <div className="col-10 col-sm-4 mb-4" key={post?._id}>
               <Post post={post} />
             </div>
