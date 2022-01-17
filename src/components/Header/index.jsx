@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import _ from "lodash";
 import { useSelector } from "react-redux";
 import { darken } from "polished";
@@ -9,7 +9,6 @@ import { darken } from "polished";
 import Nav from "./Nav";
 import ProfilePopover from "./ProfilePopover";
 import DrawerMenu from "./DrawerMenu";
-import useBreakpoints from "../../utils/useBreakPoints";
 
 const Wraper = styled.header`
   position: fixed;
@@ -64,25 +63,32 @@ const Header = () => {
   const { user } = useSelector((state) => state);
 
   const navigate = useNavigate();
-  const { isLg } = useBreakpoints();
+  const location = useLocation();
+
+  let scrollEventListener = useCallback(() => {
+    lastKnownScrollPosition = window.scrollY;
+    if (
+      (location.pathname === "/" || location.pathname.includes("/p/")) &&
+      lastKnownScrollPosition === 0
+    ) {
+      document.getElementById("header").classList.remove("float-header");
+      setFloat(false);
+    }
+    if (
+      (location.pathname === "/" || location.pathname.includes("/p/")) &&
+      lastKnownScrollPosition > 15
+    ) {
+      document.getElementById("header").classList.add("float-header");
+      setFloat(true);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
-      lastKnownScrollPosition = window.scrollY;
-      console.log("on scroll");
-      if (lastKnownScrollPosition === 0) {
-        document.getElementById("header").classList.remove("float-header");
-        setFloat(false);
-      }
-      if (lastKnownScrollPosition > 15) {
-        document.getElementById("header").classList.add("float-header");
-        setFloat(true);
-      }
-    });
+    window.addEventListener("scroll", scrollEventListener, true);
     return () => {
-      window.removeEventListener("scroll", null);
+      window.removeEventListener("scroll", scrollEventListener, true);
     };
-  }, []);
+  }, [scrollEventListener]);
 
   return (
     <Wraper float={float} className="header" id="header">
