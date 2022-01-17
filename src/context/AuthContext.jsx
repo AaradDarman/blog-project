@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import imageCompression from "browser-image-compression";
 
 import api from "../adapters/adapter";
 import { authContext } from "./auth-context";
 import { decodeToken } from "../utils/token-helper";
 import { setHeader } from "../adapters/xhr";
 import VerifyDialog from "../components/VerifyDialog";
-import { setUser } from "../redux/slices/user";
+import { setUser, changeProfileImage } from "../redux/slices/user";
 
 const AuthContext = ({ children }) => {
   const [fullName, setFullName] = useState("");
@@ -24,6 +25,7 @@ const AuthContext = ({ children }) => {
   const { user } = useSelector((state) => state);
   const location = useLocation();
   const background = location.state && location.state.background;
+  const [uploadProfileLoading, setUploadProfileLoading] = useState(false);
 
   const Baselocation = {
     pathname: "/",
@@ -100,7 +102,6 @@ const AuthContext = ({ children }) => {
       if (status === 200) {
         setHeader(data.token);
         localStorage.setItem("token", data.token);
-        console.log(decodeToken(data.token).user);
         dispatch(setUser(decodeToken(data.token).user));
         // dispatch(setLoading({ status: false }));
         if (decodeToken(data.token).user?.isAdmin) {
@@ -161,6 +162,38 @@ const AuthContext = ({ children }) => {
     }
   };
 
+  const handleChangeProfileImage = async (imageFile) => {
+    setUploadProfileLoading(true);
+    const options = {
+      maxSizeMB: 10,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
+    try {
+      const compressedFile = await imageCompression(imageFile, options);
+      const fd = new FormData();
+      fd.set("a", compressedFile, `${imageFile.name}`);
+      let jpgFormatImg = fd.get("a");
+      let formData = new FormData();
+      formData.append("profile-image", jpgFormatImg);
+      const { data, status } = await api.changeProfileImage(formData);
+      if (status === 200) {
+        dispatch(changeProfileImage(data.profileImage));
+        toast.success("پروفایل با موفقیت تغییر یافت", {
+          position: "bottom-center",
+          closeOnClick: true,
+        });
+        setUploadProfileLoading(false);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message, {
+        position: "bottom-center",
+        closeOnClick: true,
+      });
+      setUploadProfileLoading(false);
+    }
+  };
+
   return (
     <authContext.Provider
       value={{
@@ -180,6 +213,8 @@ const AuthContext = ({ children }) => {
         handleChangePassword,
         handleForgetPassword,
         handleResendVerificationCode,
+        handleChangeProfileImage,
+        uploadProfileLoading,
       }}
     >
       <VerifyDialog

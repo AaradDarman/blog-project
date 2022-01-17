@@ -25,7 +25,11 @@ const forgetPassword = (data) => {
 };
 
 const resendCode = (userId) => {
-  return http.post(`${config.localapi}/resend-code`, JSON.stringify(userId)); 
+  return http.post(`${config.localapi}/resend-code`, JSON.stringify(userId));
+};
+
+const changeProfileImage = (data) => {
+  return http.post(`${config.localapi}/change-profile-image`, data);
 };
 
 const getPosts = () => {
@@ -49,5 +53,6 @@ export default {
   resendCode,
   getPosts,
   getPost,
+  changeProfileImage,
   getCategories,
 };
