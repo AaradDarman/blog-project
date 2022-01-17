@@ -16,9 +16,11 @@ import { setUser, logout } from "../redux/slices/user";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 import Dashboard from "../components/Dashboard";
 import CreatePost from "../components/Dashboard/CreatePost";
-import Posts from "../components/Dashboard/Posts";
+import DashboardPosts from "../components/Dashboard/Posts";
 import PostContext from "../context/PostContext";
 import Post from "../components/Post";
+import Posts from "../components/Posts";
+import LoadingSpinner from "../components/shared/LoadingSpinner";
 
 const Blog = () => {
   const { user } = useSelector((state) => state);
@@ -49,7 +51,7 @@ const Blog = () => {
   return (
     <>
       {isLoading ? (
-        <div>loading</div>
+        <LoadingSpinner show={true} />
       ) : (
         <Routes>
           <Route
@@ -80,6 +82,8 @@ const Blog = () => {
               }
             />
             <Route path="/p/:id" element={<Post />} />
+            <Route path="/c/:category" element={<Posts />} />
+            <Route path="/t/:tag" element={<Posts />} />
           </Route>
           <Route
             path="/dashboard"
@@ -87,7 +91,9 @@ const Blog = () => {
               _.isEmpty(user) || !user.isAdmin ? (
                 <Navigate to="/" replace />
               ) : (
-                <DashboardLayout />
+                <AuthContext>
+                  <DashboardLayout />
+                </AuthContext>
               )
             }
           >
@@ -100,7 +106,22 @@ const Blog = () => {
                 </PostContext>
               }
             />
-            <Route path="posts" element={<Posts />} />
+            <Route
+              path="edit-post/:id"
+              element={
+                <PostContext>
+                  <CreatePost />
+                </PostContext>
+              }
+            />
+            <Route
+              path="posts"
+              element={
+                <PostContext>
+                  <DashboardPosts />
+                </PostContext>
+              }
+            />
           </Route>
         </Routes>
       )}
