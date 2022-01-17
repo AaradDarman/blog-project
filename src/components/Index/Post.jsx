@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { darken } from "polished";
 
-import { shorten } from "../../utils/string-helper";
+import { convetStringToUrlFormat, shorten } from "../../utils/string-helper";
+import { fromNow } from "../../utils/date-helper";
 
 const Wraper = styled.article`
   display: flex;
@@ -20,6 +21,7 @@ const Wraper = styled.article`
   height: 370px;
   :hover {
     box-shadow: 5px 5px 5px 6px ${({ theme }) => darken(0.01, theme.primary)};
+    padding: 0.4rem;
   }
   .post-info {
     flex: 1;
@@ -48,17 +50,33 @@ const Wraper = styled.article`
   }
   .meta-data {
     display: flex;
+    align-items: center;
     color: ${({ theme }) => darken(0.3, theme.text)};
     font-size: 0.72rem;
   }
   .author-profile {
+    width: 30px;
+    height: 30px;
     border-radius: 40%;
     margin-left: 5px;
+  }
+  .post-categories {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .post-category {
+    background-color: ${({ theme }) => theme.button};
+    border: 1px solid ${({ theme }) => darken(0.2, theme.button)};
+    color: ${({ theme }) => theme.text};
+    border-radius: 0.3rem;
+    padding: 3px 5px;
+    margin: 0 2px;
+    text-decoration: none;
   }
 `;
 const Post = ({ post }) => {
   return (
-    <Wraper bannerSrc={post.bannerImage}>
+    <Wraper bannerSrc={post?.bannerImage}>
       <Link className="post-banner" to={`/p/${post?._id}`} />
       <div className="post-info">
         <h3 className="post-title">
@@ -67,13 +85,28 @@ const Post = ({ post }) => {
         <p className="post-subtitle">{shorten(post?.subtitle, 80)}</p>
         <div className="meta-data">
           <img
-            src="https://via.placeholder.com/30x30"
+            src={
+              post?.author?.profileImage
+                ? post?.author?.profileImage
+                : "https://via.placeholder.com/30x30"
+            }
             alt="profile"
             className="author-profile"
           />
           <div className="d-flex flex-column">
             <span className="author-name">{post?.author?.fullName}</span>
-            <span className="create-date">1400/10/13</span>
+            <span className="create-date">{fromNow(post?.createAt)}</span>
+          </div>
+          <div className="post-categories mr-auto">
+            {post?.categories?.map((c, index) => (
+              <Link
+                to={`/c/${convetStringToUrlFormat(c)}`}
+                className="post-category"
+                key={index}
+              >
+                {c}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
