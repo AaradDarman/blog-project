@@ -40,10 +40,6 @@ export default slice.reducer;
 // Actions
 const { resetPost } = slice.actions;
 
-/**
- * @param {string} id - post id
- */
-
 export const clearPost = () => async (dispatch) => {
   try {
     dispatch(resetPost());

@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
+
 import styled from "styled-components";
-import { useCreatePost } from "../../context/post-context";
 
 const Wraper = styled.div`
   background-color: ${({ theme }) => theme.primary};
-  padding: 1rem;
   .banner-upload-wraper {
     width: 100%;
     background: inherit;
@@ -12,13 +11,14 @@ const Wraper = styled.div`
     cursor: pointer;
     display: flex;
     border: 1px solid ${({ theme }) => theme.secondary};
+    border-radius: 0.3rem;
+    overflow: hidden;
     font-size: 15px;
     align-items: center;
     justify-content: center;
     outline: 2px dashed gray;
     outline-offset: -10px;
-    margin: 10px 0;
-    padding: 9px 0;
+    min-height: 120px;
   }
   .banner-upload-label {
     cursor: pointer;
@@ -27,7 +27,8 @@ const Wraper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 15px;
+    margin: 0;
+    z-index: 1;
   }
   .banner-upload-input {
     width: 0.1px;
@@ -43,29 +44,30 @@ const Wraper = styled.div`
   }
 `;
 
-const BannerInput = () => {
-  const { bannerImage, setBannerImage } = useCreatePost();
-
+const BannerInput = ({ value, onChange, intent }) => {
   const handleImageUpload = (event) => {
     if (event.target.files[0]) {
-      setBannerImage(event.target.files[0]);
+      onChange(event.target.files[0]);
     }
   };
 
   return (
     <Wraper className="rtl">
-      <h3>تصویر بنر پست</h3>
-      <form enctype="multipart/form-data">
-        <div className="banner-upload-wraper">
+      <form encType="multipart/form-data">
+        <div className={`banner-upload-wraper ${intent}`}>
           <label for="post-banner" className="banner-upload-label">
-            {bannerImage ? (
-              <img
-                src={URL.createObjectURL(bannerImage)}
-                alt="banner"
-                className="banner-preview"
-              />
+            {value ? (
+              typeof value === "string" ? (
+                <img src={value} alt="banner" className="banner-preview" />
+              ) : (
+                <img
+                  src={URL.createObjectURL(value)}
+                  alt="banner"
+                  className="banner-preview"
+                />
+              )
             ) : (
-              "Drop the file or click to upload"
+              "تصویر بنر پست"
             )}
           </label>
         </div>

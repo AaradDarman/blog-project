@@ -4,17 +4,18 @@ import { EditorState, convertFromRaw } from "draft-js";
 import { Editor } from "react-draft-wysiwyg";
 import produce from "immer";
 import styled from "styled-components";
+import _ from "lodash";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { useSelector } from "react-redux";
 
-import { useCreatePost } from "../../context/post-context";
-import { useDarkMode } from "../../utils/useDarkMode";
+import { useCreatePost } from "../../../context/post-context";
+import { useDarkMode } from "../../../utils/useDarkMode";
 
 const EditorContainer = styled.div`
+  height: 100%;
   .richtext-wrapper-class {
     background-color: ${({ theme }) => theme.primary};
-    min-height: 50vh;
-    max-height: 100vh;
-    padding: 0.7rem 1rem;
+    height: 100%;
     display: flex;
     flex-direction: column;
     direction: ltr;
@@ -26,7 +27,7 @@ const EditorContainer = styled.div`
   .toolbar-class,
   .editor-class {
     border: 1px solid ${({ theme }) => theme.secondary};
-    border-radius: 2px;
+    border-radius: 0.3rem;
   }
   .toolbar-class,
   .rdw-dropdown-optionwrapper,
@@ -85,6 +86,10 @@ const EditorContainer = styled.div`
   }
   .editor-class {
     flex: 1;
+    overflow: hidden;
+  }
+  .DraftEditor-root {
+    overflow-y: scroll;
     padding: 0.5rem;
   }
   .rdw-dropdown-wrapper,
@@ -123,31 +128,21 @@ const EditorContainer = styled.div`
   }
 `;
 
-const RichTextEditor = () => {
+const RichTextEditor = ({ intent }) => {
   const { content, setContent, contentImages, setContentImages } =
     useCreatePost();
   const [contentImagesLength, setcontentImagesLength] = useState(0);
+  const { post } = useSelector((state) => state);
 
-  const defaultContent = {
-    blocks: [
-      {
-        key: "637gr",
-        text: "",
-        type: "unstyled",
-        depth: 0,
-        inlineStyleRanges: [],
-        entityRanges: [],
-        data: {
-          "text-align": "right",
-        },
-      },
-    ],
-    entityMap: {},
-  };
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  const [editorState, setEditorState] = useState(
-    EditorState.createWithContent(convertFromRaw(defaultContent))
-  );
+  useEffect(() => {
+    if (!_.isEmpty(post?.entity?.content)) {
+      setEditorState(
+        EditorState.createWithContent(convertFromRaw(post?.entity?.content))
+      );
+    }
+  }, [post?.entity]);
 
   const handleEditorChange = (state) => {
     setEditorState(state);
@@ -167,19 +162,24 @@ const RichTextEditor = () => {
   };
 
   const handleOnChange = (e) => {
-    const nextState = produce(e, (draftState) => {
-      Object.keys(draftState.entityMap).map(function (key, index) {
-        let targetImg = contentImages.find(
-          (img) => img.localSrc === draftState.entityMap[key].data.src
-        );
-        if (targetImg) {
-          return (draftState.entityMap[
-            key
-          ].data.src = `${targetImg?.file?.name}`);
-        }
+    console.log(e);
+    if (!_.isEmpty(e.entityMap)) {
+      const nextState = produce(e, (draftState) => {
+        Object.keys(draftState.entityMap).map(function (key, index) {
+          let targetImg = contentImages.find(
+            (img) => img.localSrc === draftState.entityMap[key].data.src
+          );
+          if (targetImg) {
+            return (draftState.entityMap[
+              key
+            ].data.src = `${targetImg?.file?.name}`);
+          }
+        });
       });
-    });
-    setContent(nextState);
+      setContent(nextState);
+    } else {
+      setContent(e);
+    }
     let entityKeys = Object.keys(e.entityMap);
     let imagesLength = entityKeys?.map(
       (key) => e?.entityMap[key]?.type === "IMAGE"
@@ -207,6 +207,7 @@ const RichTextEditor = () => {
   }, [contentImagesLength]);
 
   const [theme] = useDarkMode();
+  const [previewContent, setPreviewContent] = useState();
 
   return (
     <EditorContainer>
@@ -215,7 +216,7 @@ const RichTextEditor = () => {
         onEditorStateChange={handleEditorChange}
         wrapperClassName="richtext-wrapper-class"
         onChange={handleOnChange}
-        editorClassName="editor-class"
+        editorClassName={`editor-class ${intent}`}
         toolbarClassName="toolbar-class"
         toolbar={{
           options: [
@@ -244,6 +245,10 @@ const RichTextEditor = () => {
             uploadCallback: uploadImageCallBack,
             previewImage: true,
             alt: { present: true, mandatory: true },
+            defaultSize: {
+              height: "auto",
+              width: "100%",
+            },
           },
           link: {
             showOpenOptionOnHover: false,
