@@ -36,6 +36,10 @@ const getPost = (id) => {
   return http.get(`${config.localapi}/post/${id}`);
 };
 
+const getCategories = () => {
+  return http.get(`${config.localapi}/posts/categories`);
+};
+
 export default {
   signup,
   login,
@@ -45,4 +49,5 @@ export default {
   resendCode,
   getPosts,
   getPost,
+  getCategories,
 };
