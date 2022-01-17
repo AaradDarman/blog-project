@@ -1,14 +1,21 @@
 import React, { useState } from "react";
+
 import { useDispatch } from "react-redux";
-import { createNewPost } from "../redux/slices/posts";
+
+import DeletePostDialog from "../components/Dashboard/dialogs/DeletePostDialog";
+import { createNewPost, editPost } from "../redux/slices/posts";
 import { postContext } from "./post-context";
 
 const PostContext = ({ children }) => {
   const [postTitle, setPostTitle] = useState("");
   const [postSubtitle, setPostSubtitle] = useState("");
-  const [bannerImage, setBannerImage] = useState();
+  const [bannerImage, setBannerImage] = useState("");
   const [contentImages, setContentImages] = useState([]);
   const [content, setContent] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [targetPostId, setTargetPostId] = useState("");
 
   const dispatch = useDispatch();
 
@@ -25,9 +32,38 @@ const PostContext = ({ children }) => {
         title: postTitle,
         subtitle: postSubtitle,
         content,
+        categories: categories?.map((cat) => cat?.value),
+        tags: tags.map((tag) => tag?.text),
       })
     );
     dispatch(createNewPost(formData));
+  };
+
+  const handleEditPost = (id) => {
+    let formData = new FormData();
+    let contentImagesFiles = contentImages.map((c) => c.file);
+    if (contentImagesFiles.length) {
+      for (let i = 0; i < contentImagesFiles.length; i++) {
+        formData.append(contentImagesFiles[i].name, contentImagesFiles[i]);
+      }
+    }
+    formData.append("postBanner", bannerImage);
+    formData.append(
+      "post",
+      JSON.stringify({
+        title: postTitle,
+        subtitle: postSubtitle,
+        content,
+        categories: categories?.map((cat) => cat?.text),
+        tags: tags.map((tag) => tag?.text),
+      })
+    );
+    dispatch(editPost({ id, formData }));
+  };
+
+  const handleDeletePost = (id) => {
+    setShowDeleteDialog(true);
+    setTargetPostId(id);
   };
 
   return (
@@ -43,9 +79,20 @@ const PostContext = ({ children }) => {
         setContentImages,
         content,
         setContent,
+        categories,
+        setCategories,
+        tags,
+        setTags,
         handleCreatePost,
+        handleEditPost,
+        handleDeletePost,
       }}
     >
+      <DeletePostDialog
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        postId={targetPostId}
+      />
       {children}
     </postContext.Provider>
   );

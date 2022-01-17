@@ -5,13 +5,19 @@ export const postContext = createContext({
   setPostTitle: () => {},
   postSubtitle: {},
   setPostSubtitle: () => {},
-  bannerImage: {},
+  bannerImage: "",
   setBannerImage: () => {},
   contentImages: [],
   setContentImages: () => {},
   content: {},
   setContent: () => {},
+  categories: {},
+  setCategories: () => {},
+  tags: {},
+  setTags: () => {},
   handleCreatePost: () => {},
+  handleEditPost: () => {},
+  handleDeletePost: () => {},
 });
 
 export const useCreatePost = () => {
