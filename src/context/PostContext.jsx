@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import DeletePostDialog from "../components/Dashboard/dialogs/DeletePostDialog";
+import PostPreviewDialog from "../components/Dashboard/dialogs/PostPreviewDialog";
 import { createNewPost, editPost } from "../redux/slices/posts";
 import { postContext } from "./post-context";
 
@@ -15,6 +16,7 @@ const PostContext = ({ children }) => {
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showPostPreviewDialog, setShowPostPreviewDialog] = useState(false);
   const [targetPostId, setTargetPostId] = useState("");
 
   const dispatch = useDispatch();
@@ -86,12 +88,17 @@ const PostContext = ({ children }) => {
         handleCreatePost,
         handleEditPost,
         handleDeletePost,
+        setShowPostPreviewDialog,
       }}
     >
       <DeletePostDialog
         isOpen={showDeleteDialog}
         onClose={() => setShowDeleteDialog(false)}
         postId={targetPostId}
+      />
+      <PostPreviewDialog
+        isOpen={showPostPreviewDialog}
+        onClose={() => setShowPostPreviewDialog(false)}
       />
       {children}
     </postContext.Provider>

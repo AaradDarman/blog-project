@@ -18,6 +18,7 @@ export const postContext = createContext({
   handleCreatePost: () => {},
   handleEditPost: () => {},
   handleDeletePost: () => {},
+  setShowPostPreviewDialog: () => {},
 });
 
 export const useCreatePost = () => {
