@@ -2,14 +2,14 @@ import React, { useContext, useRef, useState } from "react";
 
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { darken } from "polished";
 
-import Icon from "./shared/Icon";
 import { useAuth } from "../context/auth-context";
 import { toEnglishDigits } from "../utils/string-helper";
+import Icon from "./shared/Icon";
 import LoadingSpinner from "./shared/LoadingSpinner";
 
 const Wraper = styled.div`
@@ -17,7 +17,7 @@ const Wraper = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  .login {
+  .forget-password {
     min-width: 300px;
     border-radius: 0.5rem;
     font-size: 0.8rem;
@@ -37,7 +37,7 @@ const Wraper = styled.div`
   & .bp3-form-group:nth-child(3) {
     margin-bottom: 2rem;
   }
-
+  .bp3-input,
   .bp3-button {
     background-color: ${({ theme }) => theme.primary};
     color: ${({ theme }) => theme.text};
@@ -47,27 +47,43 @@ const Wraper = styled.div`
     background-image: none;
     box-shadow: none;
   }
-
+  .bp3-input {
+    padding: 1rem 1.8rem !important;
+    border: 1px solid #5c7080;
+  }
+  .bp3-input::placeholder {
+    color: #5c7080;
+    font-size: 0.8rem;
+  }
+  .bp3-form-group label.bp3-label {
+    margin-bottom: 10px;
+  }
   .bp3-button.bp3-active {
     background-color: ${({ theme }) => theme.darkAccent};
   }
-
+  .bp3-input-action {
+    height: 100%;
+    direction: ltr;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.3rem;
+    font-size: 1rem;
+  }
   h5 {
     color: #5c7080;
     font-size: 0.8rem;
   }
-  .changePageBtn,
-  .forgetPassBtn {
+  h5 .changePageBtn {
     color: ${({ theme }) => theme.text};
     margin-right: 0.3rem;
     transition: all 0.3s ease-in-out;
     text-decoration: none;
   }
-  .changePageBtn:hover,
-  .forgetPassBtn:hover {
+  h5 .changePageBtn:hover {
     color: ${({ theme }) => theme.accent};
   }
-  .login-btn {
+  .retrive-btn {
     background-color: ${({ theme }) => theme.accent};
     color: ${({ theme }) => theme.text};
     padding: 0.6rem 0;
@@ -84,32 +100,26 @@ const Wraper = styled.div`
     background-image: none;
     transition: all 0.3s ease;
   }
-  .login-btn,
+  .retrive-btn,
   .cancel-btn {
     flex: 1;
   }
-  .login-btn:hover {
+  .retrive-btn:hover {
     background-color: ${({ theme }) => darken(0.1, theme.accent)};
   }
   .cancel-btn:hover {
     background-color: transparent;
   }
 `;
-
-const Login = () => {
+const ForgetPassword = () => {
   const navigate = useNavigate();
-  const { handleLogin, email, setEmail, password, setPassword, authLoading } =
-    useAuth();
+  const { handleForgetPassword, email, setEmail, authLoading } = useAuth();
 
-  const VerifySchema = Yup.object().shape({
+  const forgertPasswordSchema = Yup.object().shape({
     email: Yup.string()
       .email("فرمت وارد شده صحیح نمی باشد")
       .required("پر کردن این فیلد الزامی می باشد"),
-    password: Yup.string()
-      .label("Password")
-      .required("پر کردن این فیلد الزامی می باشد"),
   });
-  const passElem = useRef(null);
 
   return (
     <Wraper>
@@ -117,11 +127,9 @@ const Login = () => {
       <Formik
         initialValues={{
           email,
-          password,
         }}
-        enableReinitialize={false}
-        validationSchema={VerifySchema}
-        onSubmit={handleLogin}
+        validationSchema={forgertPasswordSchema}
+        onSubmit={handleForgetPassword}
       >
         {({
           values,
@@ -131,8 +139,8 @@ const Login = () => {
           setFieldValue,
           handleSubmit,
         }) => (
-          <form noValidate className="login rtl">
-            <h5 className="title">ورود</h5>
+          <form noValidate className="forget-password rtl">
+            <h5 className="title">بازیابی رمز عبور</h5>
             <FormGroup
               helperText={errors.email && touched.email ? errors.email : ""}
               labelInfo="*"
@@ -148,49 +156,18 @@ const Login = () => {
                   setEmail(toEnglishDigits(e.target.value));
                   setFieldValue("email", toEnglishDigits(e.target.value));
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    passElem.current.focus();
-                  }
-                }}
+                placeholder="ایمیل خود را وارد کنید"
                 value={values.email}
                 onBlur={handleBlur("email")}
-                placeholder="ایمیل خود را وارد کنید"
-                rightElement={<Icon className="icon" icon="name" size={20} />}
+                rightElement={
+                  <Icon className="icon" icon="envelope" size={20} />
+                }
                 type="email"
               />
             </FormGroup>
-            <FormGroup
-              helperText={
-                errors.password && touched.password ? errors.password : ""
-              }
-              labelInfo="*"
-              label="رمز عبور"
-            >
-              <InputGroup
-                intent={
-                  errors.password && touched.password
-                    ? "danger"
-                    : touched.password && "success"
-                }
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setFieldValue("password", e.target.value);
-                }}
-                value={values.password}
-                onBlur={handleBlur("password")}
-                placeholder="رمز عبور خود را وارد کنید"
-                rightElement={
-                  <Icon className="icon" icon="password" size={20} />
-                }
-                type="password"
-                inputRef={passElem}
-              />
-            </FormGroup>
             <div className="d-flex">
-              <Button className="login-btn mr-1" onClick={handleSubmit}>
-                ورود
+              <Button className="retrive-btn mr-1" onClick={handleSubmit}>
+                بازیابی
               </Button>
               <Button
                 className="cancel-btn ml-1"
@@ -202,18 +179,6 @@ const Login = () => {
                 انصراف
               </Button>
             </div>
-            <h5 className="mt-3 mb-2">
-              هنوز ثبت نام نکردی؟
-              <Link className="changePageBtn" to={"/signup"}>
-                ثبت نام
-              </Link>
-            </h5>
-            <h5>
-              رمزتو فراموش کردی؟
-              <Link className="forgetPassBtn" to="/forget-password">
-                بازیابی
-              </Link>
-            </h5>
           </form>
         )}
       </Formik>
@@ -221,4 +186,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgetPassword;

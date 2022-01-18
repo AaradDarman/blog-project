@@ -17,11 +17,11 @@ const verify = (verificationCode) => {
 };
 
 const changePassword = (data) => {
-  return http.post(`${config.api}/changepassword`, JSON.stringify(data));
+  return http.post(`${config.api}/change-password`, JSON.stringify(data));
 };
 
 const forgetPassword = (data) => {
-  return http.post(`${config.api}/forgetpassword`, JSON.stringify(data));
+  return http.post(`${config.api}/forget-password`, JSON.stringify(data));
 };
 
 const resendCode = (userId) => {

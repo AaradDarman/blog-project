@@ -12,6 +12,7 @@ import GenderPicker from "./GenderPicker";
 import BirthdayPicker from "./BirthdayPicker";
 import { toEnglishDigits } from "../../utils/string-helper";
 import { darken } from "polished";
+import LoadingSpinner from "../shared/LoadingSpinner";
 
 const Wraper = styled.div`
   display: flex;
@@ -28,7 +29,6 @@ const Wraper = styled.div`
   }
   h5.title {
     font-size: 1.2rem;
-    font-family: "Vazir";
     text-align: center;
     color: ${({ theme }) => theme.text};
     margin-bottom: 1rem;
@@ -119,6 +119,7 @@ const Signup = () => {
     password,
     setPassword,
     handleSignUp,
+    authLoading
   } = useAuth();
 
   const SignupSchema = Yup.object().shape({
@@ -143,6 +144,7 @@ const Signup = () => {
 
   return (
     <Wraper>
+      <LoadingSpinner show={authLoading} />
       <Formik
         initialValues={{
           fullName,
@@ -210,7 +212,9 @@ const Signup = () => {
                 value={values.email}
                 onBlur={handleBlur("email")}
                 placeholder="ایمیل خود را وارد کنید"
-                rightElement={<Icon className="icon" icon="id" size={20} />}
+                rightElement={
+                  <Icon className="icon" icon="envelope" size={20} />
+                }
                 type="email"
                 inputRef={emailElem}
               />
@@ -242,7 +246,7 @@ const Signup = () => {
                       value={value}
                       placeholder="روز / ماه / سال"
                       rightElement={
-                        <Icon className="icon" icon="id" size={20} />
+                        <Icon className="icon" icon="calendar" size={20} />
                       }
                       type="text"
                     />
@@ -280,7 +284,9 @@ const Signup = () => {
                 value={values.password}
                 onBlur={handleBlur("password")}
                 placeholder="حداقل 8 کاراکتر"
-                rightElement={<Icon className="icon" icon="lock" size={20} />}
+                rightElement={
+                  <Icon className="icon" icon="password" size={20} />
+                }
                 type="password"
               />
             </FormGroup>

@@ -19,6 +19,7 @@ export const authContext = createContext({
   handleResendVerificationCode: () => {},
   handleChangeProfileImage: () => {},
   uploadProfileLoading: false,
+  authLoading: false,
 });
 
 export const useAuth = () => {

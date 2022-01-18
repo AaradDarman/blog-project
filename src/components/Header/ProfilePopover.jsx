@@ -73,7 +73,7 @@ const ProfilePopover = ({ className }) => {
             )}
           </li>
           <li>
-            <Link onClick={() => setIsOpen(false)} to="/changepassword">
+            <Link onClick={() => setIsOpen(false)} to="/change-password">
               <Icon className="mr-2" icon="password" size={20} />
               تغییر رمز عبور
             </Link>

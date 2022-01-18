@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Button, FormGroup } from "@blueprintjs/core";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import * as Yup from "yup";
 import { useAuth } from "../context/auth-context";
 import CountDownTimer from "./CountDownTimer";
 import StyledDialog from "./shared/StyledDialog";
+import LoadingSpinner from "./shared/LoadingSpinner";
 
 const Wraper = styled.form`
   font-size: 0.8rem;
@@ -151,7 +152,7 @@ const Wraper = styled.form`
 `;
 
 const VerifyDialog = ({ isOpen, onClose }) => {
-  const { handleVerify, handleResendVerificationCode } = useAuth();
+  const { handleVerify, handleResendVerificationCode, authLoading } = useAuth();
   const [verificationCode, setVerificationCode] = useState("");
 
   const VerifySchema = Yup.object().shape({
@@ -192,6 +193,7 @@ const VerifyDialog = ({ isOpen, onClose }) => {
           handleSubmit,
         }) => (
           <Wraper noValidate className="verify rtl">
+            <LoadingSpinner show={authLoading} />
             <FormGroup
               helperText={
                 errors.verificationCode && touched.verificationCode

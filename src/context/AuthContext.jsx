@@ -26,6 +26,7 @@ const AuthContext = ({ children }) => {
   const location = useLocation();
   const background = location.state && location.state.background;
   const [uploadProfileLoading, setUploadProfileLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
 
   const Baselocation = {
     pathname: "/",
@@ -33,6 +34,7 @@ const AuthContext = ({ children }) => {
 
   const handleSignUp = async () => {
     try {
+      setAuthLoading(true);
       const { status, data } = await api.signup({
         fullName,
         email,
@@ -41,6 +43,7 @@ const AuthContext = ({ children }) => {
         password,
       });
       if (status === 201) {
+        setAuthLoading(false);
         toast.success(data.message, {
           position: "bottom-center",
           closeOnClick: true,
@@ -49,6 +52,7 @@ const AuthContext = ({ children }) => {
         setShowVerifyModal(true);
       }
     } catch (error) {
+      setAuthLoading(false);
       toast.error(error.response.data.message, {
         position: "bottom-center",
         closeOnClick: true,
@@ -58,14 +62,17 @@ const AuthContext = ({ children }) => {
 
   const handleResendVerificationCode = async () => {
     try {
+      setAuthLoading(true);
       const { status, data } = await api.resend({ userId: userId });
       if (status === 200) {
+        setAuthLoading(false);
         toast.success(data.message, {
           position: "bottom-center",
           closeOnClick: true,
         });
       }
     } catch (error) {
+      setAuthLoading(false);
       toast.error(error.response.data.message, {
         position: "bottom-center",
         closeOnClick: true,
@@ -75,19 +82,19 @@ const AuthContext = ({ children }) => {
 
   const handleVerify = async (verificationCode) => {
     try {
-      // dispatch(setLoading({ status: true }));
+      setAuthLoading(true);
       const { status } = await api.verify(verificationCode);
       if (status === 200) {
-        // dispatch(setLoading({ status: false }));
         toast.success("اکانت شما با موفقیت فعال شد", {
           position: "bottom-center",
           closeOnClick: true,
         });
+        setAuthLoading(false);
         setShowVerifyModal(false);
         navigate("/login");
       }
     } catch (error) {
-      // dispatch(setLoading({ status: false }));
+      setAuthLoading(false);
       toast.error(error.response.data.message, {
         position: "bottom-center",
         closeOnClick: true,
@@ -97,13 +104,13 @@ const AuthContext = ({ children }) => {
 
   const handleLogin = async (user) => {
     try {
-      // dispatch(setLoading({ status: true }));
+      setAuthLoading(true);
       const { data, status } = await api.login(user);
       if (status === 200) {
+        setAuthLoading(false);
         setHeader(data.token);
         localStorage.setItem("token", data.token);
         dispatch(setUser(decodeToken(data.token).user));
-        // dispatch(setLoading({ status: false }));
         if (decodeToken(data.token).user?.isAdmin) {
           navigate("/dashboard", { replace: true });
         } else {
@@ -111,7 +118,7 @@ const AuthContext = ({ children }) => {
         }
       }
     } catch (error) {
-      // dispatch(setLoading({ status: false }));
+      setAuthLoading(false);
       toast.error(error.response.data.message, {
         position: "bottom-center",
         closeOnClick: true,
@@ -121,11 +128,11 @@ const AuthContext = ({ children }) => {
 
   const handleChangePassword = async (inputData) => {
     try {
-      // dispatch(setLoading({ status: true }));
-      inputData.personalCode = user.personalCode;
+      setAuthLoading(true);
+      inputData.email = user.email;
       const { status } = await api.changePassword(inputData);
       if (status === 200) {
-        // dispatch(setLoading({ status: false }));
+        setAuthLoading(false);
         toast.success("رمز عبور شما با موفقیت تغییر یافت", {
           position: "bottom-center",
           closeOnClick: true,
@@ -133,7 +140,7 @@ const AuthContext = ({ children }) => {
         navigate(background.pathname);
       }
     } catch (error) {
-      // dispatch(setLoading({ status: false }));
+      setAuthLoading(false);
       toast.error(error.response.data.message, {
         position: "bottom-center",
         closeOnClick: true,
@@ -143,10 +150,10 @@ const AuthContext = ({ children }) => {
 
   const handleForgetPassword = async (user) => {
     try {
-      // dispatch(setLoading({ status: true }));
+      setAuthLoading(true);
       const { status } = await api.forgetPassword(user);
       if (status === 200) {
-        // dispatch(setLoading({ status: false }));
+        setAuthLoading(false);
         toast.success("رمز عبور جدید برای شما پیامک شد", {
           position: "bottom-center",
           closeOnClick: true,
@@ -154,7 +161,7 @@ const AuthContext = ({ children }) => {
         navigate("/", { state: { background: Baselocation } });
       }
     } catch (error) {
-      // dispatch(setLoading({ status: false }));
+      setAuthLoading(false);
       toast.error(error.response.data.message, {
         position: "bottom-center",
         closeOnClick: true,
@@ -215,6 +222,7 @@ const AuthContext = ({ children }) => {
         handleResendVerificationCode,
         handleChangeProfileImage,
         uploadProfileLoading,
+        authLoading,
       }}
     >
       <VerifyDialog
