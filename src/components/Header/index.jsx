@@ -24,6 +24,7 @@ const Wraper = styled.header`
     transition: all 400ms ease-in-out;
     background-image: linear-gradient(#000000c7, transparent);
     color: #fefefe;
+    min-height: 60px;
   }
   .dark-layer nav ul {
     transition: all 50ms ease-in-out;

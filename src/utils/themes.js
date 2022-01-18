@@ -4,6 +4,7 @@ export const lightTheme = {
   primary: "#EEE9E6",
   secondary: "#D5DBE7",
   accent: "#F48B0C",
+  button: "#99564A",
 };
 
 export const darkTheme = {

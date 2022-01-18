@@ -108,7 +108,7 @@ const DrawerMenu = ({ float, className }) => {
   return (
     <div className={`${className} drawer-menu`}>
       <Icon
-        color={float ? mTheme.text : "#fefefe"}
+        color={mTheme.text }
         icon="menu"
         iconSize={22}
         onClick={openDrawer}

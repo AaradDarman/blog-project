@@ -34,7 +34,7 @@ const Index = () => {
       <div className="posts col-12 col-sm-10 py-2 px-0 px-sm-5">
         <div className="row m-0 justify-content-center justify-content-sm-start">
           {posts?.entity?.map((post) => (
-            <div className="col-10 col-sm-4 mb-4" key={post?._id}>
+            <div className="col-10 col-sm-6 col-lg-4 mb-4" key={post?._id}>
               <Post post={post} />
             </div>
           ))}
