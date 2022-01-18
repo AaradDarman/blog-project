@@ -71,14 +71,15 @@ const Dashboard = () => {
       <LoadingSpinner show={uploadProfileLoading} />
       <div className="profile col-12 col-md-4">
         <div className="profile__img">
-          <img
-            src={
-              user?.profileImage
-                ? user.profileImage
-                : "https://via.placeholder.com/150x150"
-            }
-            alt="profile"
-          />
+          {user?.profileImage ? (
+            <img src={user?.profileImage} alt="profile" />
+          ) : (
+            <Icon
+              className="icon"
+              icon={user?.gender === "مرد" ? "male-avatar" : "female-avatar"}
+              size={150}
+            />
+          )}
           <label
             htmlFor="profile-img"
             className="profile__img__label-file-input m-btn"

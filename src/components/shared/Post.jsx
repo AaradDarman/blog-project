@@ -6,6 +6,7 @@ import { darken } from "polished";
 
 import { shorten } from "../../utils/string-helper";
 import { fromNow } from "../../utils/date-helper";
+import Icon from "./Icon";
 
 const Wraper = styled.article`
   display: flex;
@@ -58,6 +59,9 @@ const Wraper = styled.article`
     border-radius: 40%;
     margin-left: 5px;
   }
+  .author-profile-icon {
+    margin-left: 5px;
+  }
 `;
 const Post = ({ post }) => {
   return (
@@ -69,15 +73,21 @@ const Post = ({ post }) => {
         </h3>
         <p className="post-subtitle">{shorten(post?.subtitle, 80)}</p>
         <div className="meta-data">
-          <img
-            src={
-              post?.author?.profileImage
-                ? post?.author?.profileImage
-                : "https://via.placeholder.com/30x30"
-            }
-            alt="profile"
-            className="author-profile"
-          />
+          {post?.author?.profileImage ? (
+            <img
+              src={post?.author?.profileImage}
+              alt="profile"
+              className="author-profile"
+            />
+          ) : (
+            <Icon
+              className="author-profile-icon"
+              icon={
+                post?.author?.gender === "مرد" ? "male-avatar" : "female-avatar"
+              }
+              size={28}
+            />
+          )}
           <div className="d-flex flex-column">
             <span className="author-name">{post?.author?.fullName}</span>
             <span className="create-date">{fromNow(post?.createAt)}</span>
