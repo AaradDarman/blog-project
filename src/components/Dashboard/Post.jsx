@@ -12,6 +12,7 @@ import { fromNow } from "../../utils/date-helper";
 const Wraper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   text-align: right;
   direction: rtl;
   transition: all 0.3s ease;
@@ -70,7 +71,7 @@ const Wraper = styled.div`
   .post-categories {
     display: flex;
     flex-wrap: wrap;
-    flex: 0.4;
+    flex: 1;
   }
   .post-category {
     background-color: ${({ theme }) => theme.button};
@@ -81,6 +82,10 @@ const Wraper = styled.div`
     margin: 0 2px;
     text-decoration: none;
   }
+  @media (max-width: 950px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const Post = ({ post }) => {
@@ -88,55 +93,61 @@ const Post = ({ post }) => {
 
   return (
     <Wraper bannerSrc={post?.bannerImage} className="post">
-      <Link className="post-banner" to={`/p/${post?._id}`} />
-      <div className="post-info">
-        <h3 className="post-title">
-          <Link to={`/p/${post?._id}`}>{shorten(post?.title, 87)}</Link>
-        </h3>
-        <div className="meta-data">
-          <div className="d-flex align-items-center">
-            <Icon className="icon mr-1" icon="calendar" size={15} />
-            <span className="create-date mr-2">{fromNow(post?.createAt)}</span>
+      <div className="d-flex align-items-center">
+        <Link className="post-banner" to={`/p/${post?._id}`} />
+        <div className="post-info">
+          <h3 className="post-title">
+            <Link to={`/p/${post?._id}`}>{shorten(post?.title, 87)}</Link>
+          </h3>
+          <div className="meta-data">
+            <div className="d-flex align-items-center">
+              <Icon className="icon mr-1" icon="calendar" size={15} />
+              <span className="create-date mr-2">
+                {fromNow(post?.createAt)}
+              </span>
+            </div>
+            <div className="d-flex align-items-center">
+              <Icon className="icon mr-1" icon="view" size={15} />
+            </div>
+            <span className="views-count">{post?.viewCount}</span>
           </div>
-          <div className="d-flex align-items-center">
-            <Icon className="icon mr-1" icon="view" size={15} />
-          </div>
-          <span className="views-count">{post?.viewCount}</span>
         </div>
       </div>
-      <div className="post-categories mr-auto">
-        {post?.categories?.map((c, index) => (
+      <div className="d-flex align-items-center mt-1 mt-lg-0">
+        <div className="post-categories">
+          {post?.categories?.map((c, index) => (
+            <Link
+              to={`/c/${convetStringToUrlFormat(c)}`}
+              className="post-category"
+              key={index}
+            >
+              {c}
+            </Link>
+          ))}
+        </div>
+        <div className="post-actions d-flex justify-content-end">
           <Link
-            to={`/c/${convetStringToUrlFormat(c)}`}
-            className="post-category"
-            key={index}
+            className="d-flex align-items-center p-1"
+            to={`/dashboard/edit-post/${post?._id}`}
           >
-            {c}
+            <Icon className="icon mr-1" icon="edit" size={22} />
           </Link>
-        ))}
-      </div>
-      <div className="post-actions d-flex justify-content-end">
-        <Link
-          className="d-flex align-items-center p-1"
-          to={`/dashboard/edit-post/${post?._id}`}
-        >
-          <Icon className="icon mr-1" icon="edit" size={22} />
-        </Link>
-        <Link
-          className="p-1"
-          to={`/dashboard/delete-post/${post?._id}`}
-          onClick={(e) => {
-            e.preventDefault();
-            handleDeletePost(post._id);
-          }}
-        >
-          <Icon
-            className="delete-icon mr-1"
-            icon="delete"
-            size={24}
-            onClick={() => handleDeletePost(post._id)}
-          />
-        </Link>
+          <Link
+            className="p-1"
+            to={`/dashboard/delete-post/${post?._id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handleDeletePost(post._id);
+            }}
+          >
+            <Icon
+              className="delete-icon mr-1"
+              icon="delete"
+              size={24}
+              onClick={() => handleDeletePost(post._id)}
+            />
+          </Link>
+        </div>
       </div>
     </Wraper>
   );

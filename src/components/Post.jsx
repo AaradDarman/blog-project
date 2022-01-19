@@ -62,6 +62,7 @@ const Wraper = styled.article`
     color: rgb(232, 230, 227);
   }
   .post-content {
+    width: 90%;
     position: relative;
     top: -100px;
     z-index: 1;
@@ -123,6 +124,11 @@ const Wraper = styled.article`
   .post-tag::before {
     content: "#";
   }
+  @media (min-width: 768px) {
+    .post-content {
+      width: 75%;
+    }
+  }
 `;
 
 const Post = () => {
@@ -164,7 +170,7 @@ const Post = () => {
           <span className="views-count">{post?.entity?.viewCount}</span>
         </div>
       </div>
-      <div className="post-content w-75">
+      <div className="post-content">
         <div
           dangerouslySetInnerHTML={createMarkup(
             convertContentToHTML(post?.entity?.content)

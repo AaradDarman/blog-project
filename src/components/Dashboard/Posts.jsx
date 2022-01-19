@@ -97,7 +97,7 @@ const Posts = () => {
         </div>
       </div>
       <div className="posts-container">
-        <div className="col-8 pb-1">
+        <div className="col-12 col-md-10 col-xl-8 pb-1 px-0">
           <div className="post-wraper">
             <div className="overflow-layer">
               {posts?.entity?.map((post) => (

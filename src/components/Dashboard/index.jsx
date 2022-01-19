@@ -55,6 +55,11 @@ const Wraper = styled.div`
     z-index: -1;
     opacity: 0;
   }
+  @media (max-width: 500px) {
+    .profile {
+      padding: 1rem;
+    }
+  }
 `;
 
 const Dashboard = () => {
@@ -69,7 +74,7 @@ const Dashboard = () => {
   return (
     <Wraper>
       <LoadingSpinner show={uploadProfileLoading} />
-      <div className="profile col-12 col-md-4">
+      <div className="profile col-11 col-md-4">
         <div className="profile__img">
           {user?.profileImage ? (
             <img src={user?.profileImage} alt="profile" />
@@ -101,7 +106,7 @@ const Dashboard = () => {
             />
           </form>
         </div>
-        <div className="profile__fullname d-flex flex-column w-75">
+        <div className="profile__fullname d-flex flex-column w-100 w-sm-75">
           <FormGroup
             // helperText={errors.email && touched.email ? errors.email : ""}
             label="نام"
@@ -130,7 +135,7 @@ const Dashboard = () => {
             />
           </FormGroup>
         </div>
-        <div className="profile__email d-flex flex-column w-75">
+        <div className="profile__email d-flex flex-column w-100 w-sm-75">
           <FormGroup
             // helperText={errors.email && touched.email ? errors.email : ""}
             label="ایمیل"
@@ -160,14 +165,14 @@ const Dashboard = () => {
             />
           </FormGroup>
         </div>
-        <div className="profile__birth-date d-flex flex-column w-75">
+        <div className="profile__birth-date d-flex flex-column w-100 w-sm-75">
           <FormGroup
             // helperText={
             //   errors.birthdayDate && touched.birthdayDate
             //     ? errors.birthdayDate
             //     : ""
             // }
-            labelInfo="*"
+            // labelInfo="*"
             label="تاریخ تولد"
           >
             <BirthdayPicker
@@ -198,7 +203,7 @@ const Dashboard = () => {
             />
           </FormGroup>
         </div>
-        <div className="d-flex w-75 justify-content-between">
+        <div className="d-flex w-100 w-sm-75 justify-content-between">
           <div className="profile__register-date d-flex flex-column">
             <span>تاریخ عضویت</span>
             <span className="text-center">
