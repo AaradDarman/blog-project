@@ -8,9 +8,7 @@ import { Dialog } from "@blueprintjs/core";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import {
-  convertContentToHTML,
-} from "../../../utils/post-content-helper";
+import { convertContentToHTML } from "../../../utils/post-content-helper";
 import { useCreatePost } from "../../../context/post-context";
 import Icon from "../../shared/Icon";
 import { convetStringToUrlFormat } from "../../../utils/string-helper";
@@ -146,7 +144,7 @@ const PostPreviewDialog = ({ isOpen, onClose }) => {
     categories,
     tags,
   } = useCreatePost();
-  
+
   const { user } = useSelector((state) => state);
   const [previewContent, setPreviewContent] = useState();
   const [bSrc, setBSrc] = useState("");
@@ -220,8 +218,12 @@ const PostPreviewDialog = ({ isOpen, onClose }) => {
             <div className="post-tags">
               <span>برچسب ها: </span>
               {tags?.map((t, index) => (
-                <Link to={`/t/${t.text}`} className="post-tag" key={index}>
-                  {t.text}
+                <Link
+                  to={`/t/${convetStringToUrlFormat(t.text)}`}
+                  className="post-tag"
+                  key={index}
+                >
+                  {convetStringToUrlFormat(t.text)}
                 </Link>
               ))}
             </div>

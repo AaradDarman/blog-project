@@ -121,7 +121,7 @@ const Wraper = styled.div`
     flex: 1;
     display: flex;
     overflow: hidden;
-    min-height: 70vh;
+    min-height: 85vh;
   }
   .rich-text-form-group .bp3-form-content {
     height: calc(100% - 20px);

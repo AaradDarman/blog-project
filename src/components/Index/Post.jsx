@@ -61,9 +61,6 @@ const Wraper = styled.article`
     border-radius: 40%;
     margin-left: 5px;
   }
-  .author-profile-icon {
-    margin-left: 5px;
-  }
   .post-categories {
     display: flex;
     flex-wrap: wrap;
@@ -95,12 +92,14 @@ const Post = ({ post }) => {
               className="author-profile"
             />
           ) : (
-            <Icon
-              className="author-profile-icon"
-              icon={
-                post?.author?.gender === "مرد" ? "male-avatar" : "female-avatar"
+            <img
+              src={
+                post?.author?.gender === "مرد"
+                  ? "/images/male-avatar.png"
+                  : "/images/female-avatar.png"
               }
-              size={28}
+              alt="profile"
+              className="author-profile"
             />
           )}
           <div className="d-flex flex-column">

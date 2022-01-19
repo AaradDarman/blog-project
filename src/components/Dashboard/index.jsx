@@ -74,10 +74,13 @@ const Dashboard = () => {
           {user?.profileImage ? (
             <img src={user?.profileImage} alt="profile" />
           ) : (
-            <Icon
-              className="icon"
-              icon={user?.gender === "مرد" ? "male-avatar" : "female-avatar"}
-              size={150}
+            <img
+              src={
+                user?.gender === "مرد"
+                  ? "/images/male-avatar.png"
+                  : "/images/female-avatar.png"
+              }
+              alt="profile"
             />
           )}
           <label
@@ -120,7 +123,7 @@ const Dashboard = () => {
               //     passElem.current.focus();
               //   }
               // }}
-              value="حسین عقلایی"
+              value={user?.fullName}
               // onBlur={handleBlur("email")}
               rightElement={<Icon className="icon" icon="name" size={20} />}
               type="text"

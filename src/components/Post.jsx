@@ -77,7 +77,10 @@ const Wraper = styled.article`
     width: 100% !important;
     border-radius: 0.3rem;
   }
-  span {
+  .author,
+  .create-date,
+  .views-count,
+  .tags {
     color: inherit !important;
     background-color: inherit !important;
     font-family: inherit !important;
@@ -151,7 +154,9 @@ const Post = () => {
           </div>
           <div className="d-flex align-items-center">
             <Icon className="icon mr-1" icon="calendar" size={15} />
-            <span className="create-date mr-3">{fromNow(post?.entity?.createAt)}</span>
+            <span className="create-date mr-3">
+              {fromNow(post?.entity?.createAt)}
+            </span>
           </div>
           <div className="d-flex align-items-center">
             <Icon className="icon mr-1" icon="view" size={15} />
@@ -179,10 +184,14 @@ const Post = () => {
         </div>
         {post?.entity?.tags?.length > 0 && (
           <div className="post-tags">
-            <span>برچسب ها: </span>
+            <span className="tags">برچسب ها: </span>
             {post?.entity?.tags?.map((t, index) => (
-              <Link to={`/t/${t}`} className="post-tag" key={index}>
-                {t}
+              <Link
+                to={`/t/${convetStringToUrlFormat(t)}`}
+                className="post-tag"
+                key={index}
+              >
+                {convetStringToUrlFormat(t)}
               </Link>
             ))}
           </div>

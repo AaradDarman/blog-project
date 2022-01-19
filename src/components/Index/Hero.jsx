@@ -120,7 +120,7 @@ const Hero = () => {
             },
           }}
         >
-          {posts?.entity?.map((post) => (
+          {posts?.entity?.slice(-3)?.map((post) => (
             <CarouselItem post={post} key={post?._id} />
           ))}
         </OwlCarousel>

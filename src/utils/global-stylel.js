@@ -192,5 +192,9 @@ body {
     position: absolute;
     width: 100%;
   }
+  .Toastify__toast-body {
+    font-family: 'BYekan';
+    text-align:right;
+  }
 
   `;

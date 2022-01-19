@@ -4,6 +4,7 @@ import { WithContext as ReactTags } from "react-tag-input";
 import { useLocation } from "react-router-dom";
 
 const TagsInput = ({ values, onChange, tagStyle, intent }) => {
+  const [value, setValue] = useState();
   const [tags, setTags] = useState(values);
   const location = useLocation();
   const KeyCodes = {
@@ -26,6 +27,7 @@ const TagsInput = ({ values, onChange, tagStyle, intent }) => {
     } else {
       setTags([tag]);
     }
+    setValue("");
   };
 
   const handleDrag = (tag, currPos, newPos) => {
@@ -41,6 +43,7 @@ const TagsInput = ({ values, onChange, tagStyle, intent }) => {
   useEffect(() => {
     onChange(tags);
   }, [tags]);
+
   return (
     <ReactTags
       tags={tags}
@@ -54,6 +57,8 @@ const TagsInput = ({ values, onChange, tagStyle, intent }) => {
       handleDrag={handleDrag}
       delimiters={delimiters}
       inputFieldPosition="top"
+      handleInputChange={(e) => setValue(e.replace(/ /g, "-"))}
+      inputValue={value}
       placeholder=""
     />
   );

@@ -73,6 +73,10 @@ const CategoriesInput = ({ values, onValuesChange, intent }) => {
         borderColor: theme.secondary,
       },
     }),
+    dropdownIndicator: (provided, state) => ({
+      ...provided,
+      padding: "2px",
+    }),
     indicatorSeparator: (provided, state) => ({
       ...provided,
       backgroundColor: theme.accent,

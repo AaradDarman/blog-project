@@ -10,6 +10,7 @@ import { useAuth } from "../context/auth-context";
 import CountDownTimer from "./CountDownTimer";
 import StyledDialog from "./shared/StyledDialog";
 import LoadingSpinner from "./shared/LoadingSpinner";
+import { darken } from "polished";
 
 const Wraper = styled.form`
   font-size: 0.8rem;
@@ -85,6 +86,14 @@ const Wraper = styled.form`
     background-image: none;
     transition: all 0.3s ease;
   }
+  .verify-btn {
+    background-color: ${({ theme }) => theme.accent};
+    color: ${({ theme }) => theme.text};
+    padding: 0.6rem 0;
+    box-shadow: 0 0 0 1px rgb(16 22 26 / 40%);
+    background-image: none;
+    transition: all 0.3s ease;
+  }
   .cancel-btn {
     background-color: transparent;
     border: 1px solid #606262;
@@ -99,7 +108,7 @@ const Wraper = styled.form`
     flex: 1;
   }
   .verify-btn:hover {
-    background-color: ${({ theme }) => theme.darkAccent};
+    background-color: ${({ theme }) => darken(0.1, theme.accent)};
   }
   .cancel-btn:hover {
     background-color: transparent;
