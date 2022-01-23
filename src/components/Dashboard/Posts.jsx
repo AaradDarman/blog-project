@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { darken } from "polished";
+import _ from "lodash";
 
 import Post from "./Post";
 import { getPostsByAuthor } from "../../redux/slices/posts";
 import Icon from "../shared/Icon";
 import LoadingSpinner from "../shared/LoadingSpinner";
+import EmptyState from "../shared/EmptyState";
 
 const Wraper = styled.div`
   width: 100%;
@@ -70,6 +72,10 @@ const Wraper = styled.div`
       border-radius: 0.5rem;
     }
   }
+  .empty-state-text {
+    position: absolute;
+    bottom: 100px;
+  }
 `;
 
 const Posts = () => {
@@ -100,9 +106,17 @@ const Posts = () => {
         <div className="col-12 col-md-10 col-xl-8 pb-1 px-0">
           <div className="post-wraper">
             <div className="overflow-layer">
-              {posts?.entity?.map((post) => (
-                <Post post={post} key={post?._id} />
-              ))}
+              {_.isEmpty(posts?.entity) ? (
+                <EmptyState>
+                  <h6 className="text-center empty-state-text">
+                    هنوز پستی ایجاد نکردید
+                  </h6>
+                </EmptyState>
+              ) : (
+                posts?.entity?.map((post) => (
+                  <Post post={post} key={post?._id} />
+                ))
+              )}
             </div>
           </div>
         </div>

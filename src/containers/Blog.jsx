@@ -23,6 +23,7 @@ import Posts from "../components/Posts";
 import LoadingSpinner from "../components/shared/LoadingSpinner";
 import ForgetPassword from "../components/ForgetPassword";
 import ChangePassword from "../components/ChangePassword";
+import NotFound from "../components/404";
 
 const Blog = () => {
   const { user } = useSelector((state) => state);
@@ -86,13 +87,21 @@ const Blog = () => {
             <Route
               path="/forget-password"
               element={
-                _.isEmpty(user) ? <ForgetPassword /> : <Navigate to="/" replace />
+                _.isEmpty(user) ? (
+                  <ForgetPassword />
+                ) : (
+                  <Navigate to="/" replace />
+                )
               }
             />
             <Route
               path="/change-password"
               element={
-                !_.isEmpty(user) ? <ChangePassword /> : <Navigate to="/" replace />
+                !_.isEmpty(user) ? (
+                  <ChangePassword />
+                ) : (
+                  <Navigate to="/" replace />
+                )
               }
             />
             <Route path="/p/:id" element={<Post />} />
@@ -137,6 +146,7 @@ const Blog = () => {
               }
             />
           </Route>
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       )}
     </>
