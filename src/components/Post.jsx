@@ -4,13 +4,15 @@ import styled from "styled-components";
 import { darken, lighten } from "polished";
 import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
+import { toast } from "react-toastify";
 
 import {
   createMarkup,
   convertContentToHTML,
 } from "../utils/post-content-helper";
 import { convetStringToUrlFormat } from "../utils/string-helper";
-import { getPost, clearPost } from "../redux/slices/post";
+import { getPost, clearPost, handleLikeDislike } from "../redux/slices/post";
 import Icon from "./shared/Icon";
 import LoadingSpinner from "./shared/LoadingSpinner";
 import { fromNow } from "../utils/date-helper";
@@ -81,6 +83,7 @@ const Wraper = styled.article`
   .author,
   .create-date,
   .views-count,
+  .likes-count,
   .tags {
     color: inherit !important;
     background-color: inherit !important;
@@ -129,12 +132,18 @@ const Wraper = styled.article`
       width: 75%;
     }
   }
+  .like-btn {
+    cursor: pointer;
+  }
+  .liked-icon {
+    color: #db3737;
+  }
 `;
 
 const Post = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { post } = useSelector((state) => state);
+  const { post, user } = useSelector((state) => state);
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -169,6 +178,16 @@ const Post = () => {
           </div>
           <span className="views-count">{post?.entity?.viewCount}</span>
         </div>
+        <div className="d-flex align-items-center meta-data mt-3">
+          <span className={post?.entity?.liked && "liked-icon"}>
+            <Icon
+              className="icon mr-1"
+              icon={post?.entity?.liked ? "like-filled" : "like"}
+              size={15}
+            />
+          </span>
+          <span className="likes-count">{post?.entity?.likes?.length}</span>
+        </div>
       </div>
       <div className="post-content">
         <div
@@ -202,6 +221,24 @@ const Post = () => {
             ))}
           </div>
         )}
+        <div className="d-flex justify-content-end">
+          <span
+            className={`like-btn p-2 ${post?.entity?.liked && "liked-icon"}`}
+            onClick={() => {
+              _.isEmpty(user)
+                ? toast.error("باید اول وارد حسابت بشی", {
+                    position: "bottom-center",
+                    closeOnClick: true,
+                  })
+                : dispatch(handleLikeDislike(post?.entity?._id));
+            }}
+          >
+            <Icon
+              icon={post?.entity?.liked ? "like-filled" : "like"}
+              size={15}
+            />
+          </span>
+        </div>
       </div>
     </Wraper>
   );

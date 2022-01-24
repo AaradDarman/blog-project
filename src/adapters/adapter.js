@@ -40,6 +40,10 @@ const getPost = (id) => {
   return http.get(`${config.api}/post/${id}`);
 };
 
+const likeDislikePost = (id) => {
+  return http.put(`${config.api}/post/like-dislike/${id}`);
+};
+
 const getCategories = () => {
   return http.get(`${config.api}/posts/categories`);
 };
@@ -55,4 +59,5 @@ export default {
   getPost,
   changeProfileImage,
   getCategories,
+  likeDislikePost,
 };
