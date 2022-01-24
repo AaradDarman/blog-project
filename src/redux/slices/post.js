@@ -25,6 +25,15 @@ const slice = createSlice({
     resetPost: (state, action) => {
       state.entity = {};
     },
+    toggleLike: (state, action) => {
+      if (state?.entity?.liked) {
+        state.entity.liked = !state.entity.liked;
+        state.entity.likes = action.payload;
+      } else {
+        state.entity.liked = true;
+        state.entity.likes = action.payload;
+      }
+    },
   },
   extraReducers: {
     [getPost.fulfilled]: (state, action) => {
@@ -38,11 +47,25 @@ const slice = createSlice({
 });
 export default slice.reducer;
 // Actions
-const { resetPost } = slice.actions;
+const { resetPost, toggleLike } = slice.actions;
 
 export const clearPost = () => async (dispatch) => {
   try {
     dispatch(resetPost());
+  } catch (e) {
+    toast.error(e?.response?.data?.message, {
+      position: "bottom-center",
+      closeOnClick: true,
+    });
+  }
+};
+
+export const handleLikeDislike = (id) => async (dispatch) => {
+  try {
+    const { status, data } = await api.likeDislikePost(id);
+    if (status === 200) {
+      dispatch(toggleLike(data.likes));
+    }
   } catch (e) {
     toast.error(e?.response?.data?.message, {
       position: "bottom-center",
