@@ -7,11 +7,11 @@ export const setHeader = (token) => {
 };
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
-getToken("token").then((tk) => {
-  if (tk) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${tk}`;
-  }
-});
+// getToken("token").then((tk) => {
+//   if (tk) {
+//     axios.defaults.headers.common["Authorization"] = `Bearer ${tk}`;
+//   }
+// });
 
 axios.interceptors.response.use(null, (error) => {
   const expectetErrors =

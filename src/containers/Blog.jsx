@@ -36,11 +36,9 @@ const Blog = () => {
       if (token) {
         const decodedToken = decodeToken(token);
         if (decodedToken) {
-          console.log("if blg");
           dispatch(setUser(decodedToken.user));
           setHeader(token);
         } else {
-          console.log("else blg");
           localStorage.removeItem("token");
           dispatch(logout());
           setIsLoading(false);
@@ -48,8 +46,7 @@ const Blog = () => {
       }
       setIsLoading(false);
     } catch (error) {
-      console.log("catch ");
-      console.log(error);
+      localStorage.removeItem("token");
       setIsLoading(false);
     }
     // eslint-disable-next-line
