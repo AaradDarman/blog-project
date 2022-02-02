@@ -69,14 +69,14 @@ const Header = () => {
   let scrollEventListener = useCallback(() => {
     lastKnownScrollPosition = window.scrollY;
     if (
-      (location.pathname === "/" || location.pathname.includes("/p/")) &&
+      (location.pathname === "/" || location.pathname.startsWith("/p/")) &&
       lastKnownScrollPosition === 0
     ) {
       document.getElementById("header").classList.remove("float-header");
       setFloat(false);
     }
     if (
-      (location.pathname === "/" || location.pathname.includes("/p/")) &&
+      (location.pathname === "/" || location.pathname.startsWith("/p/")) &&
       lastKnownScrollPosition > 15
     ) {
       document.getElementById("header").classList.add("float-header");
@@ -91,13 +91,39 @@ const Header = () => {
     };
   }, [scrollEventListener]);
 
+  useEffect(() => {
+    if (location.pathname !== "/" && !location.pathname.startsWith("/p/")) {
+      setFloat(true);
+    } else {
+      setFloat(false);
+    }
+  }, [location.pathname]);
+
   return (
-    <Wraper float={float} className="header" id="header">
+    <Wraper
+      float={
+        (location.pathname !== "/" && !location.pathname.startsWith("/p/")) ||
+        float
+      }
+      className={`header ${
+        location.pathname !== "/" &&
+        !location.pathname.startsWith("/p/") &&
+        "float-header"
+      }`}
+      id="header"
+    >
       <div className="dark-layer rtl d-flex justify-content-between">
         <Link to="/" className="logo order-2 order-xl-1 ">
           sd
         </Link>
-        <Nav float={float} className="d-none d-xl-block order-2" />
+        <Nav
+          float={
+            (location.pathname !== "/" &&
+              !location.pathname.startsWith("/p/")) ||
+            float
+          }
+          className="d-none d-xl-block order-2"
+        />
         <DrawerMenu className="d-inline-block d-xl-none order-1 " />
         {_.isEmpty(user) ? (
           <div className="auth-wraper d-none d-xl-block order-3  order-xl-3 ">
